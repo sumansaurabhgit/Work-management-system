@@ -1,0 +1,238 @@
+{% comment %} <!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>{% block title %}Base{% endblock %}</title>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="" />
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/modal.min.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+  </head>
+  <body>
+    <!--[if lt IE 7]>
+      <p class="browsehappy">
+        You are using an <strong>outdated</strong> browser. Please
+        <a href="#">upgrade your browser</a> to improve your experience.
+      </p>
+    <![endif]-->
+
+    <div class="ui secondary pointing menu">
+      <a class="active item"> Home </a>
+      <a class="item"> Messages </a>
+      <a class="item"> Friends </a>
+      <div class="right menu">
+        <a class="ui item"> Logout </a>
+      </div>
+    </div>
+    <div class="ui segment">
+      <p></p>
+    </div>
+
+    {% block content %}{% endblock %}
+
+    <script src="" async defer>
+      $(".ui.modal").modal("show");
+    </script>
+  </body>
+</html>
+{% endcomment %}
+
+<!DOCTYPE html>
+{% load static %}
+<html>
+  <head>
+    <title>{% block title %}{% endblock %}</title>
+    <meta charset="UTF-8" />
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <!-- Semantic UI CSS -->
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css"
+    />
+    <!-- Semantic UI JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        // Set "Home" link as active
+        $(".item").eq(0).addClass("active");
+
+        // Change active state on click
+        $(".item").on("click", function () {
+          $(".item.active").removeClass("active");
+          $(this).addClass("active");
+        });
+      });
+    </script>
+    <style>
+
+        body{
+        background-image: url("{% static 'images/image2.jpg' %}");
+        {% comment %} background-color : #F1F4E3; {% endcomment %}
+        background-repeat: repeat;
+        background-size: cover;
+        height: 100hv;
+        wight:100vw;
+      }
+
+            .ui.menu .item {
+              font-size: 1.2em;
+            }
+
+
+            {% block addcss%}
+              {% endblock %}
+    </style>
+  </head>
+  <body >
+    <!-- Navbar -->
+    <div class="ui container vertical segment">
+      <div class="ui segment">
+        <h1>Work Management System</h1>
+      </div>
+
+      <div class="ui menu">
+        <a href="{% url 'home' %}" class="item navbar-item">Home</a>
+        {% if request.user.is_authenticated %}
+        <a class="item navbar-item teal" href="{% url 'workers' %}">
+          Manage Workers
+          <div class="ui teal left pointing label">{{worker_count}}</div>
+        </a>
+        <a class="item teal navbar-item" href="{% url 'works' %}">
+          Manage Works
+          <div class="ui teal left pointing label">{{work_count}}</div>
+        </a>
+        <a href="{% url 'pending_works' %}" class="item navbar-item">Assign</a>
+        {% else %}
+        <a class="item disabled navbar-item" href="{% url 'workers' %}"
+          >Manage Workers</a
+        >
+        <a class="item disabled navbar-item" href="{% url 'works' %}"
+          >Manage Works</a
+        >
+        <a href="{% url 'pending_works' %}" class="item disabled navbar-item">Assign</a>
+        {% endif %}
+        <div class="right menu">
+          {% if request.user.is_authenticated %}
+          <a href="{% url 'logout' %}" class="item">Log Out</a>
+          {% else %}
+          <div class="ui large buttons">
+            <a href="{% url 'login' %}" class="ui black button">Log In</a>
+            <div class="or"></div>
+            <a href="{% url 'register' %}" class="ui positive button"
+              >Sign Up</a
+            >
+          </div>
+          {% comment %}
+          <div class="item">
+            <a href="{% url 'login' %}" class="ui button">Log In</a>
+          </div>
+          <div class="item">
+            <a href="{% url 'register' %}" class="ui primary button">Sign Up</a>
+            {% endcomment %}
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    <!-- Content -->
+    <div class="ui container" >
+      {% block content %}{% endblock %}
+    </div>
+
+
+
+
+
+
+    {% comment %}
+    <div class="ui inverted vertical footer segment">
+      <div class="ui container">Travel Match 2015. All Rights Reserved</div>
+    </div>
+    {% endcomment %}
+
+
+
+
+<footer>
+  <div class="ui inverted vertical footer segment">
+    <div class="ui container">
+      <div class="ui stackable inverted divided equal height stackable grid">
+        <div class="six wide column">
+          <h4 class="ui inverted header">About Us</h4>
+          <p>
+            We are a team of dedicated professionals committed to providing the best work management system and tools for boosting productivity and efficiency.
+          </p>
+        </div>
+        <div class="five wide column">
+          <h4 class="ui inverted header">Services</h4>
+          <div class="ui inverted link list">
+            <a href='{% url 'workers' %}' class="item">Manage Workers</a>
+            <a href='{% url 'works' %}' class="item">Manage Works</a>
+            <a href="{% url 'pending_works' %}" class="item">Assign</a>
+          </div>
+        </div>
+        <div class="five wide column">
+          <h4 class="ui inverted header">Get In Touch</h4>
+          <div class="ui inverted link list">
+            <a href="#" class="item"><i class="phone icon"></i>Phone: +91-706-143-2651</a>
+            <a href="#" class="item"><i class="envelope icon"></i>Email: smanish7649@kgpian.iitkgp.ac.in</a>
+            <a href="#" class="item"><i class="address left floated card icon"></i>Address: RP HALL, IITKGP, INDIA <i class="in flag"></i></a>
+          </div>
+        </div>
+
+      </div>
+      <div class="ui inverted section divider"></div>
+      <div class="ui center aligned inverted container">
+        {% comment %} <div class="ui horizontal inverted small divided link list">
+          <a class="item" href="#">Site Map</a>
+          <a class="item" href="#">Privacy Policy</a>
+          <a class="item" href="#">Terms of Service</a>
+          <a class="item" href="#">Contact Us</a>
+        </div> {% endcomment %}
+        <p>© 2023 Work Management System. All rights reserved.</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+
+
+
+
+
+    <script>
+      // Get the current path from the URL
+
+      $(document).ready(function () {
+        // Get the current path from the URL
+        var path = window.location.pathname;
+
+        // Loop through each navbar item
+        $(".navbar-item").each(function () {
+          // Remove the active class from all items
+          $(this).removeClass("active");
+
+          // If the current item's href matches the current path, add the active class
+          if ($(this).attr("href") === path) {
+            $(this).addClass("active");
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
