@@ -1,0 +1,221 @@
+{%extends 'base.html'%} {% load static %} {%block title%}Work{%endblock%}
+{%block content%}
+
+<div
+  class="ui conatiner"
+  style="
+    min-height: 70vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding-bottom: 40px;
+  "
+>
+  <div class="ten wide column">
+    <div
+      class="ui stackable grid segment"
+      style="
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        padding: 14px 0px;
+      "
+    >
+      <div class="five wide column" style="padding: 0px">
+        <a
+          class="ui animated button circular"
+          tabindex="0"
+          href="{% url 'works' %}"
+        >
+          <div class="visible content">
+            <i class="left arrow icon"></i>
+          </div>
+          <div class="hidden content">Back</div>
+        </a>
+      </div>
+      <div class="five wide column" style="padding: 0px">
+        <h1 class="ui header" style="display: flex; justify-content: center">
+          <i class="user icon"></i> Work
+        </h1>
+      </div>
+      <div class="five wide column stackable"></div>
+    </div>
+
+    {%if work%}
+
+    <div
+      class="ui raised"
+      style="
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        padding: 20px;
+      "
+    >
+      <div class="ui link card">
+        <div class="content">
+          <a href="{% url 'work' work.id %}">
+            <h1 class="ui header large" style="font-size: 30px; color: #000">
+              {{ work.name }}
+            </h1>
+          </a>
+          <br />
+
+          <a class="right floated" href="{% url 'work' work.id %}">
+            {{work.startDate}}
+          </a>
+          <div class="meta">
+            <a href="{% url 'work' work.id %}"
+              >{{ work.numberOfWorker }} workers required</a
+            >
+            <div class="duration">
+              {% if work.duration %}Duration: {{ work.duration }}{% endif %}
+            </div>
+            <div class="priority">
+              {% if work.priority %}Priority Level: {{ work.priority }}{% endif %}
+            </div>
+          </div>
+
+          <!-- Add duration and priority level data -->
+        </div>
+        <div class="content">
+          <div class="ui two column grid">
+            <div class="column">
+              <a href="{% url 'work_update' work.id %}">
+                <span class="ui grey label">
+                  <i class="user icon"></i>
+                  {% if work.role %} {{ work.role }} {% else %} No Role {% endif %}
+                </span>
+              </a>
+            </div>
+            {% comment %} {{work.status}} {% endcomment %}
+            <div class="column">
+              {% if work.status == "completed" %}
+              <a
+                class="ui green right ribbon label large"
+                href="{% url 'work_update' work.id %}"
+              >
+                Completed
+              </a>
+              {% elif work.status == "pending" %}
+              <a
+                class="ui red right ribbon label large"
+                href="{% url 'work_update' work.id %}"
+              >
+                Pending
+              </a>
+              {% elif work.status == "progress" %}
+              <a
+                class="ui orange right ribbon label large"
+                href="{% url 'work_update' work.id %}"
+              >
+                In Progress
+              </a>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        <div class="extra content">
+          <div class="{% if work.assignee.all %}right{% endif %} floated author">;
+            {% if work.assignee.all %}
+            <div class="ui horizontal list">
+              {% for worker in work.assignee.all %}
+              <div class="item">
+                <a href="{% url 'worker' worker.id %}">
+                  <img
+                    class="ui avatar image"
+                    src="{% static 'avatar/0.png' %}"
+                  />
+                  {{ worker.name }}
+                </a>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+          {% else %}
+             <div class="ui buttons" style="width:100%">
+            <button id="assign-button" class="ui icon primary button">
+              <i class="pencil alternate icon"></i>
+              Manual 
+            </button>
+            <div class="or"></div>
+            <button
+              id="ai-assign-button"
+              class="ui icon positive button"
+            >
+            AI 
+            <i class="right magic icon"></i>
+            <!-- <i class="right user icon"></i> -->
+            </button>
+
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {%else%}
+
+    <div class="ui centered grid">
+      <div class="eight wide column">
+        <div class="ui floating massive message">
+          <p>No works found.</p>
+          <p>Try adding new work or searching for something else.</p>
+        </div>
+      </div>
+    </div>
+
+    {%endif%}
+  </div>
+</div>
+</div>
+
+<script>
+  $(document).ready(function () {
+    animateCard();
+    $("#assign-button").click(function () {
+      const selectedOption = "{{ work.id }}";
+      handleNormalAssignment(selectedOption);
+    });
+
+    $("#ai-assign-button").click(function () {
+      const selectedOption = "{{ work.id }}";
+      handleAIAssignment(selectedOption);
+    });
+
+
+  function handleNormalAssignment(selectedOption) {
+    const new_url = "/pending-works/assign-work/" + selectedOption + "/";
+    console.log(new_url);
+    // Add code to handle normal assignment
+    window.location.href = new_url;
+  }
+
+  function handleAIAssignment(selectedOption) {
+    console.log("AI Assignment");
+    const new_url = "/pending-works/ai-assign-work/" + selectedOption + "/";
+    console.log(new_url);
+    // Add code to handle AI assignment
+    window.location.href = new_url;
+  }
+  });
+
+  $(".special.cards .image").dimmer({
+    on: "hover",
+  });
+
+  function animateCard() {
+    $("#work-card").transition({
+      animation: "float",
+      duration: 1000,
+      onComplete: function () {
+        setTimeout(animateCard, 100);
+      },
+    });
+  }          
+  
+       
+</script>
+
+{%endblock%}

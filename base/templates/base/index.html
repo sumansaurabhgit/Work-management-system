@@ -1,0 +1,70 @@
+{% extends 'base.html' %} {% load static %} {% block title %}Home{% endblock %}
+{% block content%}
+
+<style>
+  .content {
+    width: 100%;
+  }
+
+  .image {
+    width: 100%;
+    height: auto;
+  }
+</style>
+      <div class="ui hidden divider"></div>
+
+<div
+  class="ui stackable grid"
+  style="min-height: 80vh;justify-content: center;align-items: center;padding-bottom: 10vh"
+>
+  <div class="sixteen wide mobile seven wide computer column stackable">
+        <div class="ui floating huge message">
+          <div class="ui huge header">Welcome to</div>
+        <h1 class="ui header">Work Management System</h1>
+      <h1>Get Started</h1>
+      <p>
+        Optimize your workload today with our easy-to-use work management
+        system.<br />
+        {% if user.is_authenticated %}
+        Explore our features!
+        {% else %}
+        Sign up now and get started!
+        {% endif %}
+    </p>
+    <p>
+
+    </p>
+
+
+    {% if user.is_authenticated %}
+    <div class="ui animated fade button" tabindex="0">
+      <a href="{% url 'workers' %}">
+        <div class="hidden content">
+          <i class="right arrow icon"></i>
+        </div>
+        <div class="visible content">Explore</div>
+      </a>
+    </div>
+    {% else %}
+    <button class="ui animated fade button" type='button'>
+    <a href="{% url 'register' %}">
+      <div class="hidden content">
+        <i class="right arrow icon"></i>
+      </div>
+      <div class="visible content">Sign Up</div>
+    </a>
+    </button>
+    {% endif %}
+    </div>
+  </div>
+
+
+  <div class="sixteen wide mobile nine wide computer column" style="padding: 0px">
+    <img src="{% static 'images/right2.png' %}" class="image" />
+  </div>
+</div>
+
+
+
+{% endblock %}
+

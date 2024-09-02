@@ -1,0 +1,106 @@
+{% extends 'base.html' %} {% block content %}
+
+<div
+  class="ui grid segment"
+  style="
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 14px 0px;
+  "
+>
+  <div class="five wide column" style="padding: 0px">
+    <a
+      class="ui animated button circular"
+      tabindex="0"
+      href="{% url 'works' %}"
+    >
+      <div class="visible content">
+        <i class="left arrow icon"></i>
+      </div>
+      <div class="hidden content">Back</div>
+    </a>
+  </div>
+  <div class="six wide column" style="padding: 0px">
+    <h1 class="ui header" style="display: flex; justify-content: center">
+                    <i class="trash icon"></i>
+
+      Delete Work
+    </h1>
+  </div>
+  <div class="four wide column stackable"></div>
+</div>
+
+<div
+  class="ui grid centered container"
+  style="
+    min-height: 70vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding-bottom: 40px;
+  "
+>
+  <div class="eight wide column">
+    <div class="eight wide column">
+      {% comment %}
+      <div class="ui attached message">
+        <h1 class="ui header">Create Work</h1>
+        Welcome to our site!
+      </div>
+      {% endcomment %}
+
+      <div class="ui fluid attached form segment">
+        <div class="content">
+          <form method="POST">
+            {% csrf_token %}
+
+            <div class="ui tiny modal" id="delete-modal">
+              <div class="header">
+              <i class="trash icon"></i>
+                Delete The Work</div>
+              <div class="content">
+                <p>Are you sure you want to delete the work {{work}}?</p>
+                <p />
+              </div>
+              <div class="actions">
+                <a class="ui positive button cancel-delete" href="{% url 'works' %}"
+                >No</a>
+                <a
+                  type="submit"
+                  value="Yes"
+                  class="ui negative right labeled icon button confirm-delete"
+                >Yes
+                  <i class="checkmark icon"></i>
+                </a>
+              </div>
+            </div>
+
+            <p>Are you sure you want to delete this work {{work}}?</p>
+            <button class="ui button red delete-button">
+              <i class="trash icon"></i>
+              Delete</button>
+            <a href="{% url 'works' %}" class="ui button cancel-button">Cancel</a>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  {% comment %} $(document).ready(function () { {% endcomment %}
+    $("#delete-modal").modal("show");
+
+    $(".cancel-delete").click(function () {
+      $("#delete-modal").modal("hide");
+    });
+
+    $(".confirm-delete").click(function () {
+      $("form").submit();
+    });
+
+  {% comment %} }); {% endcomment %}
+</script>
+
+{% endblock %}

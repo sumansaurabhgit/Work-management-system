@@ -1,0 +1,175 @@
+{% extends 'base.html' %} {% block title %} Create Work {% endblock %} {% block content %}
+<div
+  class="ui grid segment"
+  style="
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 14px 0px;
+  "
+>
+  <div class="five wide column" style="padding: 0px">
+    <a
+      class="ui animated button circular"
+      tabindex="0"
+      href="{% url 'works' %}"
+    >
+      <div class="visible content">
+        <i class="left arrow icon"></i>
+      </div>
+      <div class="hidden content">Back</div>
+    </a>
+  </div>
+  <div class="six wide column" style="padding: 0px">
+    <h1 class="ui header" style="display: flex; justify-content: center">
+      <i class="plus square outline icon"></i>Create Work
+    </h1>
+  </div>
+  <div class="four wide column stackable"></div>
+</div>
+
+{% comment %}
+<div class="ui container"></div>
+{% endcomment %}
+
+<div
+  class="ui grid centered container"
+  style="
+    min-height: 70vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding-bottom: 40px;
+  "
+>
+  <div class="eight wide column">
+    <div class="eight wide column">
+      {% comment %}
+      <div class="ui attached message">
+        <h1 class="ui header">Create Worker</h1>
+        Welcome to our site!
+      </div>
+      {% endcomment %}
+
+      <div class="ui fluid attached form segment">
+        <div class="content">
+          <form class="ui form" method="post">
+            {% csrf_token %}
+            <div class="field">
+              <label for="{{ form.name.id_for_label }}"
+                >{{ form.name.label }}</label
+              >
+              {{ form.name }}
+            </div>
+            <div class="field">
+              <label for="{{ form.numberOfWorker.id_for_label }}"
+                >{{ form.numberOfWorker.label }}</label
+              >
+              {{ form.numberOfWorker }}
+            </div>
+            <div class="field">
+              <label for="{{ form.startDate.id_for_label }}"
+                >{{ form.startDate.label }}</label
+              >
+              {{ form.startDate }}
+            </div>
+            <div class="field">
+              <label for="{{ form.duration.id_for_label }}"
+                >{{ form.duration.label }}</label
+              >
+              {{ form.duration }}
+            </div>
+            <div class="field">
+              <label for="{{ form.priority.id_for_label }}"
+                >{{ form.priority.label }}</label
+              >
+              {{ form.priority }}
+            </div>
+            <div class="field">
+              <label for="{{ form.role.id_for_label }}"
+                >{{ form.role.label }}</label
+              >
+              {{ form.role }}
+            </div>
+            {% comment %} <div class="field">
+              <label for="{{ form.status.id_for_label }}"
+                >{{ form.status.label }}</label
+              >
+              <div class="ui selection dropdown">
+                <input
+                  type="hidden"
+                  name="{{ form.status.name }}"
+                  value="{{ form.status.value }}"
+                />
+                <i class="dropdown icon"></i>
+                <div class="default text">{{ form.status.label }}</div>
+                <div class="menu">
+                  <div class="item active selected" data-value="pending" selected>Pending</div>
+                  <div class="item" data-value="progress">In Progress</div>
+                  <div class="item" data-value="completed">Completed</div>
+                </div>
+              </div>
+            </div> {% endcomment %}
+
+            <button type="submit" class="ui primary button">Create</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    {% comment %}
+    <div class="ui container">
+      <div class="ui grid centered stackable">
+        <div
+          class="sixteen wide mobile eight wide tablet six wide computer column"
+        >
+          <div class="ui grid">
+            <div class="ten wide column">
+              <form class="ui form" method="post">
+                {% csrf_token %}
+                <div class="field">
+                  <label for="{{ form.name.id_for_label }}">Name</label>
+                  {{ form.name }}
+                </div>
+                <div class="field">
+                  <label for="{{ form.role.id_for_label }}">Role</label>
+                  {{ form.role }}
+                </div>
+                <div class="field">
+                  <label>Rating</label>
+                  <div class="ui star rating huge" id="rating-input"></div>
+                  <input type="hidden" name="rating" id="rating-value" />
+                </div>
+                <div class="field">
+                  <div class="ui slider checkbox">
+                    <input
+                      type="checkbox"
+                      name="available"
+                      id="availability-input"
+                    />
+                    <label
+                      for="availability-input"
+                      style="font-size: 1.2rem; font-color: #000000"
+                    >
+                      Available</label
+                    >
+                  </div>
+                </div>
+                <button type="submit" class="ui primary button">Create</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {% endcomment %} {% comment %} redesign it make it more beautiful using
+    sementic ui , use slider for the radio buttin and star icons for giving
+    rating inputs , be creative {% endcomment %}
+  </div>
+</div>
+<script>
+  $(".ui.dropdown").dropdown();
+</script>
+
+{% endblock %}

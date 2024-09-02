@@ -1,0 +1,148 @@
+{%extends 'base.html'%} {% load static %} {%block title%}Worker{%endblock%}
+{%block content%}
+
+<div
+  class="ui conatiner"
+  style="min-height: 70vh; display: flex; flex-direction: column; justify-content: flex-start; padding-bottom: 40px;"
+>
+<div class="ten wide column">
+
+    <div class="ui stackable grid segment" style="justify-content: center; align-items: center; width: 100%; padding: 14px 0px ;">
+      <div class="five wide column" style="padding: 0px;">
+        <a class="ui animated button circular" tabindex="0" href="{% url 'workers' %}">
+          <div class="visible content">
+            <i class="left arrow icon"></i>
+          </div>
+          <div class="hidden content">
+            Back
+          </div>
+        </a>
+      </div>
+      <div class="five wide column" style="padding: 0px;">
+        <h1 class="ui header" style="display:flex; justify-content:center;">
+          <i class="user icon"></i> Worker
+        </h1>
+      </div>
+      <div class="five wide column stackable">
+
+      </div>
+    </div>
+
+
+  {%if worker%}
+
+  <div class="ui raised" style="display: flex; justify-content: center; align-items: center; flex-direction: column; padding: 20px;">
+    <div class="ui floated special cards">
+      <div class="ui card segment" id="worker-card">
+
+
+        <div class="blurring dimmable image">
+      <div class="ui dimmer">
+        <div class="content">
+          <div class="center">
+            <a class="ui inverted button" href='{% url 'worker_update' worker.id %}'>Edit</a>
+            </a>
+            {% comment %} <div class="ui inverted button">Add Friend</div> {% endcomment %}
+          </div>
+
+
+
+        </div>
+      </div>
+      <img src="/static/avatar/0.png" />
+    </div>
+
+
+
+    {% comment %} <div class="image">
+            <img src="/images/avatar/large/elliot.jpg">
+        </div> {% endcomment %}
+
+
+
+        <div class="content">
+          <div class="ui two column grid">
+            <div class="column"><h1 class="header">{{worker.name}}</h1></div>
+            <div class="column">
+              {% if worker.available %}
+              <a class="ui green right ribbon label"> Available </a>
+              {% else %}
+              <a class="ui red right ribbon label"> Unavailable </a>
+              {% endif %}
+            </div>
+          </div>
+
+          {% comment %}
+          <div class="meta">
+            <a>{{worker.rating}}</a>
+          </div>
+          {% endcomment %}
+        </div>
+        <div class="extra content">
+          <span class="right floated">
+            <i class="user icon"></i>
+            {{worker.role}}
+          </span>
+          <span>
+            <i class="star icon"></i>
+            {{worker.rating}}
+          </span>
+        </div>
+
+        <div class="extra content">
+          {% for work in worker.assigned.all %}
+          <div class="left floated author" style="">
+            Currently working on:
+          </div>
+          <a href="{% url 'work' work.id %}">
+          <div class="right floated" style="">
+            <div class="ui teal right ribbon label">
+              <div class="item">
+                <i class="tasks icon" style=""></i>
+                {{ work.name }}
+              </div>
+            </div>
+          </div>
+        </a>
+          <div class="ui hidden divider"></div>
+          {% endfor %}
+        </div>
+
+      </div>
+    </div>
+
+    <p></p>
+  </div>
+
+  {%else%}
+
+  <h1>Worker not found</h1>
+
+  {%endif%}
+
+</div>
+</div>
+
+<script>
+  $(document).ready(function () {
+    animateCard();
+  });
+
+
+  $('.special.cards .image').dimmer({
+  on: 'hover'
+});
+
+
+  function animateCard() {
+    $("#worker-card").transition({
+      animation: "float",
+      duration: 1000,
+      onComplete: function () {
+        setTimeout(animateCard, 100);
+      },
+    });
+  }
+</script>
+
+{%endblock%}

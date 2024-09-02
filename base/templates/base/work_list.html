@@ -1,0 +1,186 @@
+{% extends 'base.html' %} {% load static %} {% block addcss %} {% endblock %} {% block title %} Work List {% endblock %} {% block content %}
+<div
+  class="ui container"
+  style="
+    min-height: 70vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding-bottom: 40px;
+  "
+>
+  <div class="ten wide column">
+    <div
+      class="ui stackable grid segment"
+      style="justify-content: center; align-items: center"
+    >
+      <div class="five wide column" style="padding: 0px">
+        <a
+          class="ui animated button circular"
+          tabindex="0"
+          href="{% url 'home' %}"
+        >
+          <div class="visible content">
+            <i class="left arrow icon"></i>
+          </div>
+          <div class="hidden content">Back</div>
+        </a>
+      </div>
+      <div class="five wide column" style="padding: 0px">
+        <h1 class="ui header" style="display: flex; justify-content: center">
+          <i class="tasks icon"></i> Work List
+        </h1>
+      </div>
+      <div class="five wide column stackable">
+        <div
+          class="right floated content"
+          style="
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+          "
+        >
+          <form class="ui form" method="get">
+            <div class="ui field action input">
+              <input
+                type="text"
+                name="search-works"
+                value="{{ search_input }}"
+                placeholder="Search..."
+              />
+              <button type="submit" class="ui icon button">
+                <i class="search icon"></i>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div
+      style="
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        height: 100%;
+      "
+    >
+      <a href="{% url 'work_create' %}" class="ui icon primary labeled button">
+        <i class="tasks plus icon"></i>
+        Create Work
+      </a>
+    </div>
+
+
+
+    <div class="ui hidden divider"></div>
+
+    <div class="ui three cards">
+      {% for work in works %}
+      <div class="ui link card" >
+        <div class="content">
+
+
+          {% if work.status != 'progress' %}
+          <a href="{% url 'work_delete' work.id %}"><i class="right floated close icon" ></i></a>
+          {% else %}
+          <a  href="{% url 'work_complete' work.id %}">
+          <i class="right floated check icon" ></i></a>
+          {% endif %}
+          <a href="{% url 'work' work.id %}" >
+          <div class="header" style="font-size:20px;color:#000;">{{ work.name }}</div>
+        </a>
+          <hr>
+          <a class="right floated"  href="{% url 'work' work.id %}" >
+            {{work.startDate}}
+          </a>
+
+          <div class="meta">
+            <a href="{% url 'work' work.id %}" >{{ work.numberOfWorker}} workers required</a>
+          </div>
+        </div>
+        <div class="content">
+
+
+
+          <div class="ui two column grid">
+            <div class="column">
+                <a href ="{% url 'work_update' work.id %}">
+                <span class="ui grey label">
+                  <i class="user icon"></i>
+                  {% if work.role %}
+                  {{ work.role }}
+                  {% else %}
+                  No Role
+                  {% endif %}
+                </span>
+              </a>
+              </div>
+        {% comment %} {{work.status}} {% endcomment %}
+              <div class="column">
+
+
+                {% if work.status == "completed" %}
+                <a class="ui green right ribbon label large" href ="{% url 'work_update' work.id %}"> Completed </a>
+                {% elif work.status == "pending" %}
+                <a class="ui red right ribbon label large" href ="{% url 'work_update' work.id %}"> Pending </a>
+                {% elif work.status == "progress" %}
+                <a class="ui orange right ribbon label large" href ="{% url 'work_update' work.id %}"> In Progress </a>
+                {% endif %}
+              </div>
+          </div>
+
+
+
+
+
+
+        </div>
+        <div class="extra content">
+          {% comment %} <button class="ui button">Join Project</button> {% endcomment %}
+          <div class="right floated author" >
+            <div class="ui horizontal list">
+              {% for worker in work.assignee.all %}
+              <div class="item">
+                <a href="{% url 'worker' worker.id %}">
+                <img
+                  class="ui avatar image"
+                  src="{% static 'avatar/0.png' %}"
+                />
+                {{ worker.name }}
+              </a>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+      {% empty %}
+    </div>
+      <div class="ui middle aligned divided selection animated list">
+       <div class="ui centered grid">
+      <div class="ten wide column">
+      <div class="ui floating massive message">
+
+        <p>No works found.</p>
+        <p>Try adding new work or search for something else.</p>
+      </div>
+      </div>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="ui divider"></div>
+
+  </div>
+</div>
+
+<script>
+  $(document).ready(function () {
+    $(".ui.avatar.image.tiny").each(function (index) {
+      var imageName = Math.floor(Math.random() * 4).toString() + ".png";
+      $(this).attr("src", "/static/avatar/" + imageName);
+    });
+  });
+</script>
+{% endblock %}

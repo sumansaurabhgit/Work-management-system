@@ -1,0 +1,116 @@
+{% extends 'base.html' %} {% block content %}
+
+<div
+  class="ui grid segment"
+  style="
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 14px 0px;
+  "
+>
+  <div class="four wide column" style="padding: 0px">
+    <a
+      class="ui animated button circular"
+      tabindex="0"
+      href="{% url 'pending_works' %}"
+    >
+      <div class="visible content">
+        <i class="left arrow icon"></i>
+      </div>
+      <div class="hidden content">Back</div>
+    </a>
+  </div>
+  <div class="seven wide column" style="padding: 0px">
+    <h1 class="ui header" style="display: flex; justify-content: center">
+      <i class="plus square outline icon"></i>Assign Workers to Work
+    </h1>
+  </div>
+  <div class="three wide column stackable"></div>
+</div>
+
+<!-- {% comment %}
+<div class="ui container"></div>
+{% endcomment %} -->
+
+<div
+  class="ui grid centered container"
+  style="
+    min-height: 50vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding-bottom: 40px;
+  "
+>
+  <div class="eight wide column">
+    <div class="eight wide column">
+      <div class="ui fluid attached form segment">
+        <div class="content">
+          <form class="ui form" method="post">
+            <h2 class="ui header">
+              Work selected:
+              <a href="{% url 'work' work.id %}">{{ work.name }}</a>
+            </h2>
+            {% csrf_token %}
+            <div class="field" style="display: none">
+              <label>Work:</label>
+              {{ form.work }}
+            </div>
+
+            <div class="field">
+              <label>Workers:</label>
+              {% comment %} {{ form.workers }} {% endcomment %}
+              <select
+                name="workers"
+                required
+                id="id_workers"
+                multiple
+                class="ui dropdown {% if form.workers.errors %} error{% endif %}"
+              >
+                {% for worker in valid_worker %}
+
+                <option value="{{ worker.id }}">
+                  <p>
+                    <strong>{{ worker.name }}</strong> &emsp;&emsp; Rating : {{worker.rating }} &emsp;&emsp; Role : {{ worker.role }}
+                  </p>
+                </option>
+                {% empty %}
+                <option value="" disabled selected>No Workers Available</option>
+                {% endfor %}
+              </select>
+              {% for error in form.workers.errors %}
+              <div class="ui pointing red basic label error-tag">
+                {{ error }}
+              </div>
+              {% endfor %}
+            </div>
+
+            <button class="ui primary button" type="submit">Assign</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function () {
+    $("#id_workers").dropdown();
+  });
+
+  $(document).ready(function () {
+    // If there is an element with the .error-tag class, play the tada animation
+    if ($(".error-tag").length > 0) {
+      $(".error-tag").transition("shake");
+    }
+
+    // Attach a click event listener to all elements with the .error-tag class
+    $(".error-tag").on("click", function () {
+      // Play the tada animation on the closest .error element when clicked
+      $(this).closest(".error-tag").transition("zoom");
+    });
+  });
+</script>
+
+{% endblock %}

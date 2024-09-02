@@ -1,0 +1,123 @@
+{% extends 'base.html' %} {% block addcss %} {% endblock %} {% block title %}
+Register {% endblock %} {% block content %}
+      <div class="ui hidden divider"></div>
+
+<div class="ui grid centered container" style="min-height: 70vh;display: flex;flex-direction: column;justify-content: flex-start;align-items: center;padding: 0 10px;">
+  <div class="eight wide column">
+    <div class="ui attached message">
+      <h1 class="ui header">Register</h1>
+      Create your account
+    </div>
+
+    <div class="ui fluid attached form segment">
+      <div class="content">
+        <form class="ui form" method="post">
+          {% csrf_token %}
+          <div class="field{% if form.username.errors %} error{% endif %}">
+            {{ form.username.label_tag }}
+
+          <div class="ui left icon input">
+            {{ form.username }}
+            <i class="user icon"></i>
+          </div>
+
+            {% for error in form.username.errors %}
+            <div class="ui pointing red basic label error-tag">{{ error }}</div>
+            {% endfor %}
+          </div>
+
+
+
+          <div class="field{% if form.password1.errors %} error{% endif %}">
+            {{ form.password1.label_tag }}
+          <div class="ui left icon action input">
+            <i class="lock icon"></i>
+
+              {{ form.password1 }}
+              <button id="togglePassword1" class="ui icon button" type='button'>
+                <i class="eye icon"></i>
+              </button>
+            </div>
+            {% for error in form.password1.errors %}
+            <div class="ui pointing red basic label error-tag">{{ error }}</div>
+            {% endfor %}
+          </div>
+
+          <div class="field{% if form.password2.errors %} error{% endif %}">
+            {{ form.password2.label_tag }}
+
+            <div class="ui left icon input">
+
+            {{ form.password2 }}
+
+
+            <i class="lock icon"></i>
+          </div>
+
+            {% for error in form.password2.errors %}
+            <div class="ui pointing red basic label error-tag">{{ error }}</div>
+            {% endfor %}
+          </div>
+
+          <div class="ui fluid large buttons">
+            <button class="ui primary labeled icon button" type="submit">
+              <i class="user plus icon"></i>
+              Sign up
+            </button>
+          </div>
+        </form>
+
+        <div class="ui message">
+          <p>Already have an account? <a href="{% url 'login' %}">Login</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+   $(document).ready(function() {
+     var timeoutId;
+     var toggleButton = $("#togglePassword1");
+     var passwordInput = $("input[name='password1']");
+
+     var error = $(".error");
+
+
+
+     toggleButton.on("mousedown", function() {
+       // Show the password immediately
+       passwordInput.attr("type", "text");
+       toggleButton.addClass("active");
+
+       // Hide the password after a delay
+       timeoutId = setTimeout(function() {
+         passwordInput.attr("type", "password");
+         toggleButton.removeClass("active");
+       }, 1000); // Change this number to adjust how long the password is visible
+     });
+
+     $(document).on("mouseup", function() {
+       clearTimeout(timeoutId);
+       toggleButton.removeClass("active");
+       passwordInput.attr("type", "password");
+     });
+   });
+
+    $(document).ready(function() {
+        // If there is an element with the .error-tag class, play the tada animation
+        if ($('.error-tag').length > 0) {
+          $('.error-tag').transition('shake');
+        }
+
+        // Attach a click event listener to all elements with the .error-tag class
+        $('.error-tag').on('click', function() {
+          // Play the tada animation on the closest .error element when clicked
+          $(this).closest('.error-tag').transition('zoom');
+        });
+      });
+
+
+
+  </script>
+</div>
+{% endblock %}

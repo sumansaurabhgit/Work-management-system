@@ -1,0 +1,114 @@
+{% extends 'base.html' %} {% block title %} Sign in {% endblock %}
+ {% block content %}
+<div class="ui hidden divider"></div>
+
+<div
+  class="ui grid centered container"
+  style="
+    min-height: 70vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0 10px;
+  "
+>
+  <div class="eight wide column">
+    <div class="ui attached message">
+      <h1 class="ui header">Sign in</h1>
+      Welcome to our site!
+    </div>
+
+    <div class="ui fluid attached form segment">
+      <div class="content">
+        <form class="ui form" method="POST">
+          {% csrf_token %}
+
+          <div class="field{% if form.username.errors %} error{% endif %}">
+            {{ form.username.label_tag }}
+            <div class="ui left icon input">
+              {{ form.username }}
+              <i class="user icon"></i>
+            </div>
+          </div>
+
+          <div
+            class="field password_error{% if form.non_field_errors %} error{% endif %}"
+          >
+            {{ form.password.label_tag }}
+
+            <div class="ui left icon action input">
+              {{ form.password }}
+              <i class="lock icon"></i>
+              <button
+                id="togglePassword"
+                class="ui icon button"
+                tabindex="-1"
+                type="button"
+              >
+                <i class="eye icon"></i>
+              </button>
+            </div>
+            {% for error in form.non_field_errors %}
+            <div class="ui pointing red basic label error-tag">{{ error }}</div>
+            {% endfor %}
+          </div>
+
+          <div class="ui fluid large buttons">
+            <button class="ui primary labeled icon button" type="submit">
+              <i class="lock alternate icon"></i>
+              Login
+            </button>
+          </div>
+        </form>
+
+        <div class="ui message">
+          <i class="help icon"></i>Don't have an account?
+          <a href="{% url 'register' %}">Register</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  
+  <script>
+    var timeoutId;
+
+    $("#togglePassword").on("mousedown", function () {
+      var passwordInput = $(this).siblings("input[name='password']");
+      passwordInput.attr("type", "text");
+      $(this).addClass("active");
+
+      timeoutId = setTimeout(function () {
+        passwordInput.attr("type", "password");
+        $("#togglePassword").removeClass("active");
+      }, 1000);
+    });
+
+    $(document).on("mouseup", function () {
+      clearTimeout(timeoutId);
+      $("#togglePassword").removeClass("active");
+      $("input[name='password']").attr("type", "password");
+    });
+
+    $(".message .close").on("click", function () {
+      $(this).closest(".message").transition("zoom");
+    });
+
+    $(document).ready(function () {
+      // If there is an element with the .error-tag class, play the tada animation
+      if ($(".error-tag").length > 0) {
+        $(".error-tag").transition("shake");
+      }
+
+      // Attach a click event listener to all elements with the .error-tag class
+      $(".error-tag").on("click", function () {
+        // Play the tada animation on the closest .error element when clicked
+        $(this).closest(".error-tag").transition("zoom");
+      });
+    });
+  </script>
+</div>
+{% endblock %}

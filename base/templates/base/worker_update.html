@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% block title %}Edit Worker{% endblock %}
+
+{% block content %}
+  <div class="ui grid segment" style="justify-content: center; align-items: center; width: 100%; padding: 14px 0px;">
+    <div class="five wide column" style="padding: 0px">
+      <a class="ui animated button circular" tabindex="0" href="{% url 'workers' %}">
+        <div class="visible content"><i class="left arrow icon"></i></div>
+        <div class="hidden content">Back</div>
+      </a>
+    </div>
+    <div class="six wide column" style="padding: 0px">
+      <h1 class="ui header" style="display: flex; justify-content: center"><i class="user plus icon"></i>Edit Worker</h1>
+    </div>
+    <div class="four wide column stackable"></div>
+  </div>
+
+  <div class="ui grid centered container" style="min-height: 70vh;display: flex;flex-direction: row;justify-content: center;padding-bottom: 40px;">
+    <div class="eight wide column">
+      <div class="ui fluid attached form segment">
+        <form class="ui form" method="post">
+          {% csrf_token %}
+          <div class="field">
+            <label for="{{ form.name.id_for_label }}">Name</label>
+            {{ form.name }}
+          </div>
+
+          <div class="field">
+            <label for="{{ form.role.id_for_label }}">Role</label>
+            {{ form.role }}
+          </div>
+
+          <div class="field">
+            <label>Rating</label>
+            <div class="ui star rating huge" id="rating-input" data-rating="{{ worker.rating }}"></div>
+            <input type="hidden" name="rating" id="rating-value" value="{{ worker.rating }}">
+          </div>
+
+          {% comment %} <div class="field">
+            <label>Availability</label>
+            <div class="ui slider checkbox">
+              {% if worker.available %}
+                <input type="checkbox" name="available" id="availability-input" checked>
+              {% else %}
+                <input type="checkbox" name="available" id="availability-input">
+              {% endif %}
+              <label for="availability-input" style="font-size: 1.2rem;font-color: #000000;">Available</label>
+            </div>
+          </div> {% endcomment %}
+
+          <button type="submit" class="ui primary button"><i class="save icon"></i>Update</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    $(function () {
+      // initialize Semantic UI star rating component
+      $('#rating-input').rating({
+        maxRating: 10,
+        onRate: function (value) {
+          console.log('on rate:', value);
+          $('#rating-value').val(value);
+        },
+      });
+    });
+  </script>
+{% endblock %}

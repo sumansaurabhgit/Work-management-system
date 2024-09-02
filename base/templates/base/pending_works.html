@@ -1,0 +1,199 @@
+{% extends 'base.html' %} {% block content %}
+
+<div
+  class="ui grid segment"
+  style="
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 14px 0px;
+  "
+>
+  <div class="five wide column" style="padding: 0px">
+    <a
+      class="ui animated button circular"
+      tabindex="0"
+      href="{% url 'pending_works' %}"
+    >
+      <div class="visible content">
+        <i class="left arrow icon"></i>
+      </div>
+      <div class="hidden content">Back</div>
+    </a>
+  </div>
+  <div class="six wide column" style="padding: 0px">
+    <h1 class="ui header" style="display: flex; justify-content: center">
+      <i class="plus square outline icon"></i>Assign Work
+    </h1>
+  </div>
+  <div class="four wide column stackable"></div>
+</div>
+
+{% comment %}
+<div class="ui container"></div>
+{% endcomment %}
+
+<div
+  class="ui grid centered container"
+  style="
+    min-height: 50vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding-bottom: 40px;
+  "
+>
+  <div class="eight wide column">
+    <div class="eight wide column">
+      {% comment %}
+      <div class="ui attached message">
+        <h1 class="ui header">Create Worker</h1>
+        Welcome to our site!
+      </div>
+      {% endcomment %}
+
+      <div class="ui fluid attached form segment">
+        <div class="content">
+          <form id="assign-work-form">
+            <div class="field">
+              <label for="pending-works">Pending Works:</label>
+              <select
+                id="pending-works"
+                name="pending-works"
+                required
+                class="ui dropdown"
+              >
+                {% for work in pending_works %}
+                <option value="{{ work.pk }}">{{ work.name }}</option>
+                {% empty %}
+                <option disabled>No pending works</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="ui buttons" style="width:-webkit-fill-available">
+              <button id="assign-button" class="ui icon primary button" type="submit">
+                <i class="pencil alternate icon"></i>
+                Manual Assignment
+              </button>
+              <div class="or"></div>
+              <button
+                id="ai-assign-button"
+                class="ui icon positive button"
+                type="submit"
+              >
+              AI Assignment
+              <i class="right magic icon"></i>
+              <!-- <i class="right user icon"></i> -->
+              </button>
+    </div>
+
+          </form>
+
+          <!-- <script>
+            const assignWorkForm = document.getElementById("assign-work-form");
+            assignWorkForm.addEventListener("submit", (event) => {
+              event.preventDefault();
+              const selectedOption =
+                document.getElementById("pending-works").value;
+              const new_url = "assign-work/" + selectedOption + "/";
+              console.log(new_url);
+
+              window.location.href = new_url;
+            });
+          </script> -->
+          <script>
+              const assignWorkForm = document.getElementById("assign-work-form");
+              assignWorkForm.addEventListener("submit", (event) => {
+                event.preventDefault();
+                const selectedOption = document.getElementById("pending-works").value;
+
+                if (event.submitter.id === "assign-button") {
+                  handleNormalAssignment(selectedOption);
+                } else if (event.submitter.id === "ai-assign-button") {
+                  handleAIAssignment(selectedOption);
+                }
+              });
+
+              function handleNormalAssignment(selectedOption) {
+                const new_url = "assign-work/" + selectedOption + "/";
+                console.log(new_url);
+                // Add code to handle normal assignment
+                window.location.href = new_url;
+              }
+
+              function handleAIAssignment(selectedOption) {
+                console.log("AI Assignment");
+                const new_url = "ai-assign-work/" + selectedOption + "/";
+                console.log(new_url);
+                // Add code to handle AI assignment
+                window.location.href = new_url;
+              }
+              </script>
+                    </div>
+                  </div>
+                </div>
+
+                {% comment %}
+                <div class="ui container">
+                  <div class="ui grid centered stackable">
+                    <div
+                      class="sixteen wide mobile eight wide tablet six wide computer column"
+                    >
+                      <div class="ui grid">
+                        <div class="ten wide column">
+                          <form class="ui form" method="post">
+                            {% csrf_token %}
+                            <div class="field">
+                              <label for="{{ form.name.id_for_label }}">Name</label>
+                              {{ form.name }}
+                            </div>
+                            <div class="field">
+                              <label for="{{ form.role.id_for_label }}">Role</label>
+                              {{ form.role }}
+                            </div>
+                            <div class="field">
+                              <label>Rating</label>
+                              <div class="ui star rating huge" id="rating-input"></div>
+                              <input type="hidden" name="rating" id="rating-value" />
+                            </div>
+                            <div class="field">
+                              <div class="ui slider checkbox">
+                                <input
+                                  type="checkbox"
+                                  name="available"
+                                  id="availability-input"
+                                />
+                                <label
+                                  for="availability-input"
+                                  style="font-size: 1.2rem; font-color: #000000"
+                                >
+                                  Available</label
+                                >
+                              </div>
+                            </div>
+                            <button type="submit" class="ui primary button">Create</button>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {% endcomment %} {% comment %} redesign it make it more beautiful using
+                sementic ui , use slider for the radio buttin and star icons for giving
+                rating inputs , be creative {% endcomment %}
+              </div>
+            </div>
+
+            <script>
+              $(document).ready(function () {
+                $("#pending-works").dropdown();
+              });
+          </script>
+
+          {% comment %} {{ pending_works }} {% endcomment %} {% endblock %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

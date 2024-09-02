@@ -1,0 +1,212 @@
+{% extends 'base.html' %} {% load static %} {% block addcss %} {% endblock %} {% block title %} Worker List {% endblock %} {% block content %}
+<div
+  class="ui container"
+  style="
+    min-height: 70vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding-bottom: 40px;
+  "
+>
+  <div class="ten wide column">
+    <div
+      class="ui stackable grid segment"
+      style="justify-content: center; align-items: center">
+      <div class="five wide column" style="padding: 0px">
+        <a
+          class="ui animated button circular"
+          tabindex="0"
+          href="{% url 'home' %}"
+        >
+          <div class="visible content">
+            <i class="left arrow icon"></i>
+          </div>
+          <div class="hidden content">Back</div>
+        </a>
+      </div>
+      <div class="five wide column" style="padding: 0px">
+        <h1 class="ui header" style="display: flex; justify-content: center">
+          <i class="users icon"></i> Worker List
+        </h1>
+      </div>
+      <div class="five wide column stackable">
+        <div
+          class="right floated content"
+          style="
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+          "
+        >
+          <form class="ui form" method="get">
+            <div class="ui field action input">
+              <input
+                type="text"
+                name="search-workers"
+                value="{{ search_input }}"
+                placeholder="Search..."
+              />
+              <button type="submit" class="ui icon button">
+                <i class="search icon"></i>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div
+      style="
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        height: 100%;
+      "
+    >
+      <a
+        href="{% url 'worker_create' %}"
+        class="ui icon primary labeled button"
+      >
+        <i class="user plus icon"></i>
+        Create Worker
+      </a>
+    </div>
+
+    <div class="ui middle aligned divided selection animated list">
+      {% for worker in workers %}
+      <div class="item">
+        {% comment %}
+        <div
+          class="right floated content"
+          style="
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+          "
+        >
+          <a
+            href="{% url 'worker_delete' worker.id %}"
+            class="ui compact icon button"
+          >
+            <i class="close icon" style="color: #000"></i>
+          </a>
+        </div>
+        {% endcomment %} {% if worker.available %}
+        <a href="{% url 'worker_delete' worker.id %}"
+          ><i class="right floated close icon" style=""></i
+        ></a>
+        {% endif %}
+
+        <img class="ui avatar image tiny" src="{% static 'avatar/0.png' %}" />
+        <div class="content">
+
+        {% for work in worker.assigned.all %}
+        <div class="right floated" style="">
+          <div class="left floated author" style="">
+            Currently working on:
+          </div>
+          <a href="{% url 'work' work.id %}">
+        <div class="ui horizontal teal label">
+          <div class="item">
+            <i class="tasks icon" style=""></i>
+            {{ work.name }}
+          </div>
+        </div>
+      </div>
+    </a>
+
+      {% endfor %}
+      <h2 class="header">
+
+
+
+            <a href="{% url 'worker' worker.id %}" style="color: #000"
+            >{{ worker.name }}
+          </a>
+        </h2>
+          {% comment %} <div class="description">
+            idgd
+          </div> {% endcomment %}
+
+
+          <div class="description">
+            <a href="{% url 'worker_update' worker.id %}">
+              <div class="ui horizontal list three large">
+                <div class="item" style="width: auto">
+                  <div class="content">
+                    <span class="ui grey label">
+                      <i class="user icon"></i>
+                      {% if worker.role %} {{ worker.role }} {% else %} No Role
+                      {% endif %}
+                    </span>
+                  </div>
+                </div>
+                <div class="item" style="width: auto">
+                  <div class="content">
+                    <span class="ui tag label">
+                      <i class="star icon"></i>
+                      {% if worker.rating %} {{ worker.rating }} {% else %} --
+                      {% endif %}
+                    </span>
+                  </div>
+                </div>
+                <div class="item" style="width: auto">
+                  <div class="content">
+                    {% if worker.available %}
+                    <span class="ui tag green label">
+                      <i class="calendar alternate outline icon"></i> Available
+                    </span>
+                    {% else %}
+                    <span class="ui tag red label">
+                      <i class="calendar alternate outline icon"></i>
+                      Unavailable
+                    </span>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+      {% empty %}
+      <div class="ui centered grid">
+      <div class="ten wide column">
+      <div class="ui floating massive message">
+
+        <p>No workers found.</p>
+        <p>Try adding new worker or search for something else.</p>
+      </div>
+      </div>
+      </div>
+
+
+
+
+
+
+
+
+
+
+
+
+      {% endfor %}
+    </div>
+
+    <div class="ui divider"></div>
+  </div>
+</div>
+
+{% comment %} <script>
+  $(document).ready(function () {
+    $(".ui.avatar.image.tiny").each(function (index) {
+      var imageName = Math.floor(Math.random() * 4).toString() + ".png";
+      $(this).attr("src", "/static/avatar/" + imageName);
+    });
+  });
+</script> {% endcomment %}
+{% endblock %}
